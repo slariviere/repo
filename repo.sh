@@ -16,11 +16,11 @@ fi
 # Create repository for all the default repository
 createRepo(){
   version=$1
-  createrepo -v "/mnt/repo/${version}/os"
-  createrepo -v "/mnt/repo/${version}/updates"
-  createrepo -v "/mnt/repo/${version}/extras"
-  createrepo -v "/mnt/repo/${version}/centosplus"
-  createrepo -v "/mnt/repo/${version}/contrib"
+  createrepo -v "${baseDir}/${version}/os"
+  createrepo -v "${baseDir}/${version}/updates"
+  createrepo -v "${baseDir}/${version}/extras"
+  createrepo -v "${baseDir}/${version}/centosplus"
+  createrepo -v "${baseDir}/${version}/contrib"
 }
 
 # Create the directory if it's not available
