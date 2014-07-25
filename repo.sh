@@ -13,16 +13,6 @@ else
     touch /mnt/repo/lock     
 fi
 
-# Create repository for all the default repository
-createRepo(){
-  version=$1
-  createrepo -v "${baseDir}/${version}/os"
-  createrepo -v "${baseDir}/${version}/updates"
-  createrepo -v "${baseDir}/${version}/extras"
-  createrepo -v "${baseDir}/${version}/centosplus"
-  createrepo -v "${baseDir}/${version}/contrib"
-}
-
 # Create the directory if it's not available
 checkDirectory(){
     completeDir=${baseDir}/${1}
@@ -32,14 +22,19 @@ checkDirectory(){
     fi
 }
 
+# Get each directory 
+getDirs(){
+  find ${baseDir}/${1} -maxdepth 1 -type d | egrep -v "^${baseDir}/${1}$"
+}
+
 # Get the latests packages
 checkDirectory 6.5
 rsync  -avSHP --delete --exclude "local*" --exclude "xen4" --exclude "SCL" --exclude "cr" --exclude "fasttrack" --exclude "isos" --exclude "repodata" --exclude "i386" centos.mirror.iweb.ca::centos/6.5/ ${baseDir}/6.5
-createRepo 6.5
+getDirs 6.5 | xargs -I {} createrepo -v {}
 
 checkDirectory 7
 rsync  -avSHP --delete --exclude "local*" --exclude "fasttrack" --exclude "isos" --exclude "repodata" --exclude "i386" centos.mirror.iweb.ca::centos/7/ ${baseDir}/7
-createRepo 7
+getDirs 7 | xargs createrepo -v
 
 # Fix the files permission
 chown -R apache:apache /mnt/repo
