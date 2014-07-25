@@ -24,7 +24,7 @@ checkDirectory(){
 
 # Get each directory 
 getDirs(){
-  find ${baseDir}/${1} -maxdepth 1 -type d | egrep -v "^${baseDir}/${1}$"
+  find ${baseDir}/${1} -mindepth 2 -maxdepth 2 -type d
 }
 
 # Get the latests packages
