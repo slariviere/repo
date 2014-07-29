@@ -15,10 +15,19 @@ fi
 
 # Create the directory if it's not available
 checkDirectory(){
-    completeDir=${baseDir}/${1}
-    if [ ! -d $completeDir ] ; then
+    completeRepoDir="${baseDir}/${1}"
+    completeCacheDir="${baseDir}/cache/${1}"
+
+    # Check for repo directory
+    if [ ! -d $completeRepoDir ] ; then
 	echo "[+] Creating reposiroty directory"
-	mkdir $completeDir
+	mkdir $completeRepoDir
+    fi
+
+    # Check for the cache dir 
+    if [ ! -d $completeCacheDir ] ; then
+	echo "[+] Creating reposiroty cache directory"
+	mkdir -p $completeCacheDir
     fi
 }
 
@@ -52,12 +61,12 @@ getRepoDef(){
 # Get the latests packages
 checkDirectory 6.5
 rsync  -avSHP --delete --exclude "local*" --exclude "xen4" --exclude "SCL" --exclude "cr" --exclude "fasttrack" --exclude "isos" --exclude "repodata" --exclude "i386" centos.mirror.iweb.ca::centos/6.5/ ${baseDir}/6.5
-getDirs 6.5 | xargs -I {} createrepo -v {}
+getDirs 6.5 | xargs -I {} createrepo -v {} --cache ${baseDir}/cache/6.5 --update
 getRepoDef 
 
 checkDirectory 7
 rsync  -avSHP --delete --exclude "local*" --exclude "fasttrack" --exclude "isos" --exclude "repodata" --exclude "i386" centos.mirror.iweb.ca::centos/7/ ${baseDir}/7
-getDirs 7 | xargs -I {} createrepo -v {}
+getDirs 7 | xargs -I {} createrepo -v {} --cache ${baseDir}/cache/7 --update
 
 # Fix the files permission
 chown -R apache:apache /mnt/repo
