@@ -19,21 +19,21 @@ checkDirectory(){
     completeCacheDir="${baseDir}/cache/${1}"
 
     # Check for repo directory
-    if [ ! -d $completeRepoDir ] ; then
+    if [ ! -d "$completeRepoDir" ] ; then
 	echo "[+] Creating reposiroty directory"
-	mkdir $completeRepoDir
+	mkdir "$completeRepoDir"
     fi
 
     # Check for the cache dir 
-    if [ ! -d $completeCacheDir ] ; then
+    if [ ! -d "$completeCacheDir" ] ; then
 	echo "[+] Creating reposiroty cache directory"
-	mkdir -p $completeCacheDir
+	mkdir -p "$completeCacheDir"
     fi
 }
 
 # Get each directory 
 getDirs(){
-  find ${baseDir}/${1} -mindepth 2 -maxdepth 2 -type d
+  find "${baseDir}/${1}" -mindepth 2 -maxdepth 2 -type d
 }
 
 # Create a repository file usable to get the local repository
@@ -51,7 +51,7 @@ getRepoDef(){
 
   for repoDir in $(find ${sourceDir} -mindepth 1 -maxdepth 1 -type d)
   do
-    repoName=$(echo $repoDir | sed 's/.*\///')
+    repoName=$(echo "$repoDir" | sed 's/.*\///')
     echo "[${repoName}-local]" >>  $repoFilename
     echo "name=Local-\$releasever - ${repoName}" >> $repoFilename
     echo -e "baseurl=http://${hostname}/\$releasever/${repoName}/\$basearch/\n" >> $repoFilename
